@@ -40,6 +40,7 @@ public class PaintC extends Component implements Runnable{
     @Override
     public void paint(Graphics gc)                                                                                  //fonction en charge de "dessiner" la cible
     {
+        //System.out.println("test paint");
         Graphics g2 = (Graphics) gc;
 
         g2.setColor(Color.lightGray);
@@ -134,7 +135,7 @@ public class PaintC extends Component implements Runnable{
                 return 10;
 
             case 2:
-                return 500;
+                return 10;
         }
         
         return 0;
