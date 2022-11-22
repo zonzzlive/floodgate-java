@@ -3,14 +3,18 @@ import java.awt.*;
 public class PaintC extends Component implements Runnable{
 
     enum statusErreur {
-        OK,                                             //
-        COLLISION,                                      //
-        RIVERHEIGHT,                                    //
+        OKB1,                                           //
+        OKB2,                                           //
+        COLLISIOND1,                                    //
+        COLLISIOND2,                                    //
+        RIVERHEIGHTV1,                                  //
+        RIVERHEIGHTV2,                                  //
     }
 
     String statusAuto = "MANUAL";
 
-    int[] statusBtnManual;    
+    int[] statusBtnManual;
+    int[] speedElement;
 
     int maxHeight;
     int maxWidth;
@@ -41,6 +45,8 @@ public class PaintC extends Component implements Runnable{
         statusBtnManual[1] = 0;                                                                       //porte 2;  = 0, fermé; = 1; ouvert
         statusBtnManual[2] = 0;                                                                       //vanne 1;  = 0, fermé; = 1; ouvert
         statusBtnManual[3] = 0;                                                                       //vanne 2;  = 0, fermé; = 1; ouvert
+
+        speedElement = new int[6];
     
 
         if(boat.pos == 1){
@@ -91,23 +97,25 @@ public class PaintC extends Component implements Runnable{
 
 //--------------------------------------------------------------------------------RUN PART----------------------------------------------------------------------------------------------
 
+    statusErreur status;
 
     @Override
     public void run(){
         int sleepTime;
 
-        statusErreur status = statusErreur.OK;
+        checkBoatStatus();
 
         while(true){
             try {
                 if((collisionDetection() != -1)){                                                                               //si il y'a une collision
                     if(riverArray[checkRiverBoat()].posY != riverArray[checkRiverBoat() + (- boat.pos)].posY){                  //vérifie la height de la rivière sur laquelle se trouve le boat
-                        status = statusErreur.RIVERHEIGHT;
+                        checkValveStatus();
                         if(checkCloseDoor() != 0){                                                                              //les deux portes ne sont pas fermées
-                            status = statusErreur.COLLISION;
-                            if(checkCloseDoor() == 1){                                                                          //la porte 1 est ouverte
+                            if(checkCloseDoor() == 1){  
+                                status = statusErreur.COLLISIOND1;                                                              //la porte 1 est ouverte
                                 moveDoorYR(door1, 1);
                             } else if (checkCloseDoor() == 2){                                                                  //la porte 2 est ouverte
+                                status = statusErreur.COLLISIOND2;
                                 moveDoorYR(door2, 1);
                             }
                         } else {                                                                                                //les deux portes sont fermées
@@ -116,24 +124,25 @@ public class PaintC extends Component implements Runnable{
                     } else {
                         if((collisionDetection() == 1) && !checkDoorHeight(door1)){                                             //si collision sur la porte 1
                             moveDoorYR(door1, -1);
-                            status = statusErreur.COLLISION;
+                            status = statusErreur.COLLISIOND1;
                         } else if ((collisionDetection() == 2) && !checkDoorHeight(door2)){                                     //si collision sur la porte 2
                             moveDoorYR(door2, -1);
-                            status = statusErreur.COLLISION;
+                            status = statusErreur.COLLISIOND2;
                         } else {
-                            status = statusErreur.OK;
+                            checkBoatStatus();
                         }
                     }
                 } 
 
-                if(floatBoat() && status == statusErreur.OK){                                                                   //si le boat a une bonne posY et qu'il n'y a pas de problème
+                if(floatBoat() && ((status == statusErreur.OKB1) || (status == statusErreur.OKB2))){                                                                   //si le boat a une bonne posY et qu'il n'y a pas de problème
                     boat.moveBoatX(1);
                 }
                 sleepTime = sleepTime(status);
                 Thread.sleep(sleepTime);                                                                                                //met en pause le thread
                 repaint();
-                status = statusErreur.OK;
+                checkBoatStatus();
             } catch (Exception e) {
+
             }
         }
     }
@@ -141,14 +150,23 @@ public class PaintC extends Component implements Runnable{
     public int sleepTime(statusErreur status){
         
         switch(status){
-            case OK:
-                return 5;
+            case OKB1:
+                return 101 - speedElement[0];
 
-            case COLLISION:
-                return 20;
+            case OKB2:
+                return 101 - speedElement[1];
 
-            case RIVERHEIGHT:
-                return 20;
+            case COLLISIOND1:
+                return 101 - speedElement[2];
+
+            case COLLISIOND2:
+                return 101 - speedElement[3];
+
+            case RIVERHEIGHTV1:
+                return 101 - speedElement[4];
+                
+            case RIVERHEIGHTV2:
+                return 101 - speedElement[5];
         }
         
         return 0;
@@ -209,6 +227,14 @@ public class PaintC extends Component implements Runnable{
         }
 
         return collisionNb;
+    }
+
+    public void checkBoatStatus(){
+        if(boat.pos == -1){
+            status = statusErreur.OKB1;
+        } else {
+            status = statusErreur.OKB2;
+        }
     }
 
 //--------------------------------------------------------------------------------DOOR PART----------------------------------------------------------------------------------------------
@@ -275,9 +301,9 @@ public class PaintC extends Component implements Runnable{
         } else {
             if(checkRiverBoat() == 1){
                 if((boat.pos == -1) && (statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                    riverArray[1].moveRiverY(moveRiverSpeed());
+                    riverArray[1].moveRiverY(- moveRiverSpeed());
                 } else if ((boat.pos == 1) && (statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                    riverArray[1].moveRiverY(moveRiverSpeed());
+                    riverArray[1].moveRiverY(- moveRiverSpeed());
                 }
             } else {
                 if((boat.pos == 1) && (statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
@@ -294,6 +320,14 @@ public class PaintC extends Component implements Runnable{
             return -boat.pos;
         } else {
             return boat.pos;
+        }
+    }
+
+    public void checkValveStatus(){
+        if(collisionDetection() == 1){
+            status = statusErreur.RIVERHEIGHTV1;
+        } else if(collisionDetection() == 2){
+            status = statusErreur.RIVERHEIGHTV2;
         }
     }
 
