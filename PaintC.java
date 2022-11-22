@@ -2,6 +2,16 @@ import java.awt.*;
 
 public class PaintC extends Component implements Runnable{
 
+    enum statusErreur {
+        OK,                                             //
+        COLLISION,                                      //
+        RIVERHEIGHT,                                    //
+    }
+
+    String statusAuto = "MANUAL";
+
+    int[] statusBtnManual;    
+
     int maxHeight;
     int maxWidth;
 
@@ -25,6 +35,13 @@ public class PaintC extends Component implements Runnable{
         this.boat = boat;
         this.door1 = door1;
         this.door2 = door2;
+
+        statusBtnManual = new int[4];
+        statusBtnManual[0] = 0;                                                                       //porte 1;  = 0, fermé; = 1; ouvert
+        statusBtnManual[1] = 0;                                                                       //porte 2;  = 0, fermé; = 1; ouvert
+        statusBtnManual[2] = 0;                                                                       //vanne 1;  = 0, fermé; = 1; ouvert
+        statusBtnManual[3] = 0;                                                                       //vanne 2;  = 0, fermé; = 1; ouvert
+    
 
         if(boat.pos == 1){
             boat.posY = riverArray[2].posY - 20;
@@ -79,63 +96,59 @@ public class PaintC extends Component implements Runnable{
     public void run(){
         int sleepTime;
 
-        int status = 0;                                                                                                         //status = 0, pas de problème; status = 1, problème de collision avec les portes; status = 2, le niveau de la rivière n'est pas le bon
+        statusErreur status = statusErreur.OK;
 
         while(true){
             try {
                 if((collisionDetection() != -1)){                                                                               //si il y'a une collision
                     if(riverArray[checkRiverBoat()].posY != riverArray[checkRiverBoat() + (- boat.pos)].posY){                  //vérifie la height de la rivière sur laquelle se trouve le boat
-                        status = 2;
-                        if(checkCloseDoor() != 0){
-                            status = 1;
-                            if(checkCloseDoor() == 1){
-                                door1.moveDoorY(1);
-                            } else if (checkCloseDoor() == 2){
-                                door2.moveDoorY(1);
+                        status = statusErreur.RIVERHEIGHT;
+                        if(checkCloseDoor() != 0){                                                                              //les deux portes ne sont pas fermées
+                            status = statusErreur.COLLISION;
+                            if(checkCloseDoor() == 1){                                                                          //la porte 1 est ouverte
+                                moveDoorYR(door1, 1);
+                            } else if (checkCloseDoor() == 2){                                                                  //la porte 2 est ouverte
+                                moveDoorYR(door2, 1);
                             }
-                        } else {
-                            if(checkRiverBoat() == 1){
-                                riverArray[checkRiverBoat()].moveRiverY(- boat.pos);
-                            } else {
-                                riverArray[checkRiverBoat() - boat.pos].moveRiverY(boat.pos);
-                            }
+                        } else {                                                                                                //les deux portes sont fermées
+                            moveRiver();
                         }    
                     } else {
                         if((collisionDetection() == 1) && !checkDoorHeight(door1)){                                             //si collision sur la porte 1
-                            door1.moveDoorY(-1);
-                            status = 1;
+                            moveDoorYR(door1, -1);
+                            status = statusErreur.COLLISION;
                         } else if ((collisionDetection() == 2) && !checkDoorHeight(door2)){                                     //si collision sur la porte 2
-                            door2.moveDoorY(-1);
-                            status = 1;
+                            moveDoorYR(door2, -1);
+                            status = statusErreur.COLLISION;
                         } else {
-                            status = 0;
+                            status = statusErreur.OK;
                         }
                     }
                 } 
 
-                if(floatBoat() && status == 0){
+                if(floatBoat() && status == statusErreur.OK){                                                                   //si le boat a une bonne posY et qu'il n'y a pas de problème
                     boat.moveBoatX(1);
                 }
                 sleepTime = sleepTime(status);
                 Thread.sleep(sleepTime);                                                                                                //met en pause le thread
                 repaint();
+                status = statusErreur.OK;
             } catch (Exception e) {
-                // TODO: handle exception
             }
         }
     }
 
-    public int sleepTime(int status){
+    public int sleepTime(statusErreur status){
         
         switch(status){
-            case 0:
+            case OK:
                 return 5;
 
-            case 1:
-                return 10;
+            case COLLISION:
+                return 20;
 
-            case 2:
-                return 10;
+            case RIVERHEIGHT:
+                return 20;
         }
         
         return 0;
@@ -218,11 +231,22 @@ public class PaintC extends Component implements Runnable{
         return 0;
     }
 
+    public void moveDoorYR (Door door, int speed){
+        int checkStatus = statusBtnManual[door.pos] + speed;
+        if(statusAuto == "AUTO"){
+            door.moveDoorY(speed);
+        } else {
+            if((checkStatus == 0) || (checkStatus == 1)){
+                door.moveDoorY(speed);
+            }
+        }
+    }
+
 
 
 //--------------------------------------------------------------------------------TRAFFIC LIGHT PART----------------------------------------------------------------------------------------------
 
-public void changeTrafficLight(Graphics g2, TrafficLight trafficLight){
+    public void changeTrafficLight(Graphics g2, TrafficLight trafficLight){
         if(trafficLight.pos == 0){
             if(checkDoorHeight(door1)){
                 g2.setColor(Color.green);
@@ -235,6 +259,41 @@ public void changeTrafficLight(Graphics g2, TrafficLight trafficLight){
             } else {
                 g2.setColor(Color.red);
             }
+        }
+    }
+
+//--------------------------------------------------------------------------------RIVER/VALVE PART----------------------------------------------------------------------------------------------
+
+    public void moveRiver (){
+
+        if(statusAuto == "AUTO"){
+            if(checkRiverBoat() == 1){                                                                  //boat sur la rivière centrale
+                riverArray[1].moveRiverY(- moveRiverSpeed());
+            } else {                                                                                    //boat sur la rivière de gauche ou de droite
+                riverArray[1].moveRiverY(moveRiverSpeed());
+            }
+        } else {
+            if(checkRiverBoat() == 1){
+                if((boat.pos == -1) && (statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
+                    riverArray[1].moveRiverY(moveRiverSpeed());
+                } else if ((boat.pos == 1) && (statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
+                    riverArray[1].moveRiverY(moveRiverSpeed());
+                }
+            } else {
+                if((boat.pos == 1) && (statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
+                    riverArray[1].moveRiverY(moveRiverSpeed());
+                } else if ((boat.pos == -1) && (statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
+                    riverArray[1].moveRiverY(moveRiverSpeed());
+                }
+            }
+        }
+    }
+
+    public int moveRiverSpeed(){
+        if(checkRiverBoat() == -1){
+            return -boat.pos;
+        } else {
+            return boat.pos;
         }
     }
 

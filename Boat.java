@@ -43,4 +43,14 @@ public class Boat{
             posY -= speed;
         }
     }
+
+    public void respawnBoat(int posT){
+        if (posT == -1){
+            pos = posT;
+            posX = -width;
+        } else {
+            pos = posT;
+            posX = maxWidth;
+        }
+    }
 }
