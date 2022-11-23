@@ -87,6 +87,30 @@ public class Window extends JFrame{
         panelValveAval.setBounds(0,0,50,30); 
         panelValveAval.setLayout(new BoxLayout(panelValveAval, BoxLayout.Y_AXIS));
 
+        //-----------------------------JPANEL INDICATOR PART-----------------------------
+
+        JPanel panelDoorAmontStatus = new JPanel();
+        panelDoorAmontStatus.setBounds(0,0,50,30);
+        panelDoorAmontStatus.setBackground(Color.red);
+
+        JPanel panelDoorAvalStatus = new JPanel();
+        panelDoorAvalStatus.setBounds(0,0,50,30);
+        panelDoorAvalStatus.setBackground(Color.red);
+
+
+        JPanel panelValveAmontStatus = new JPanel();
+        panelValveAmontStatus.setBounds(0,0,50,30);
+        panelValveAmontStatus.setBackground(Color.red);
+
+        JPanel panelValveAvalStatus = new JPanel();
+        panelValveAvalStatus.setBounds(0,0,50,30);
+        panelValveAvalStatus.setBackground(Color.red);
+
+
+        JPanel panelModeStatus = new JPanel();
+        panelModeStatus.setBounds(0,0,50,30);
+        panelModeStatus.setBackground(Color.orange);
+
         //-----------------------------JBUTTON PART-----------------------------
 
         JButton btnAuto = new JButton("Automatique");
@@ -123,6 +147,14 @@ public class Window extends JFrame{
         
         JLabel labelSpeedValveAmont = new JLabel("Vitesse de la valve :", JLabel.LEFT);
         JLabel labelSpeedValveAval = new JLabel("Vitesse de la valve :", JLabel.LEFT);
+
+        JLabel labelStatusDoorAmont = new JLabel("Fermé", JLabel.LEFT);
+        JLabel labelStatusDoorAval = new JLabel("Fermé", JLabel.LEFT);
+
+        JLabel labelStatusValveAmont = new JLabel("Fermé", JLabel.LEFT);
+        JLabel labelStatusValveAval = new JLabel("Fermé", JLabel.LEFT);
+
+        JLabel labelStatusMode = new JLabel("Manuel", JLabel.LEFT);
 
         //-----------------------------FRAME PART-----------------------------
         
@@ -169,10 +201,16 @@ public class Window extends JFrame{
         panelBoatAmont.add(spinnerBoatAmont);
         panelBoatAmont.add(btnAmontBoat);
 
+        panelDoorAmontStatus.add(labelStatusDoorAmont);
+        
+        panelDoorAmont.add(panelDoorAmontStatus);
         panelDoorAmont.add(labelSpeedDoorAmont);
         panelDoorAmont.add(spinnerDoorAmont);
         panelDoorAmont.add(btnAmontDoor);
         
+        panelValveAmontStatus.add(labelStatusValveAmont);
+        
+        panelValveAmont.add(panelValveAmontStatus);
         panelValveAmont.add(labelSpeedValveAmont);
         panelValveAmont.add(spinnerValveAmont);
         panelValveAmont.add(btnAmontValve);
@@ -183,6 +221,9 @@ public class Window extends JFrame{
 
             //-----------------------------AUTO PART-----------------------------
 
+        panelModeStatus.add(labelStatusMode);
+        
+        panelAuto.add(panelModeStatus);
         panelAuto.add(btnSaveSpeed);
         panelAuto.add(btnAuto);
 
@@ -192,10 +233,16 @@ public class Window extends JFrame{
         panelBoatAval.add(spinnerBoatAval);
         panelBoatAval.add(btnAvalBoat);
 
+        panelDoorAvalStatus.add(labelStatusDoorAval);
+        
+        panelDoorAval.add(panelDoorAvalStatus);
         panelDoorAval.add(labelSpeedDoorAval);
         panelDoorAval.add(spinnerDoorAval);
         panelDoorAval.add(btnAvalDoor);
 
+        panelValveAvalStatus.add(labelStatusValveAval);
+        
+        panelValveAval.add(panelValveAvalStatus);
         panelValveAval.add(labelSpeedValveAval);
         panelValveAval.add(spinnerValveAval);
         panelValveAval.add(btnAvalValve);
@@ -229,9 +276,13 @@ public class Window extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if(paintC.statusAuto == "AUTO"){
                     btnAuto.setText("Automatique");
+                    panelModeStatus.setBackground(Color.ORANGE);
+                    labelStatusMode.setText("Manuel");
                     paintC.statusAuto = "MANUAL";
                 } else {
                     btnAuto.setText("Manuel");
+                    panelModeStatus.setBackground(Color.green);
+                    labelStatusMode.setText("Automatique");
                     paintC.statusAuto = "AUTO";
                 }
             }
@@ -246,7 +297,7 @@ public class Window extends JFrame{
         btnAmontDoor.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeStatusBtn(btnAmontDoor, "door");
+                changeStatusBtn(btnAmontDoor, "door", panelDoorAmontStatus, labelStatusDoorAmont);
                 paintC.statusBtnManual[0] = statusBtn;
             }
         });
@@ -254,7 +305,7 @@ public class Window extends JFrame{
         btnAvalDoor.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeStatusBtn(btnAvalDoor, "door");
+                changeStatusBtn(btnAvalDoor, "door", panelDoorAvalStatus, labelStatusDoorAval);
                 paintC.statusBtnManual[1] = statusBtn;
             }
         });
@@ -262,7 +313,7 @@ public class Window extends JFrame{
         btnAmontValve.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeStatusBtn(btnAmontValve, "valve");
+                changeStatusBtn(btnAmontValve, "valve",panelValveAmontStatus, labelStatusValveAmont);
                 paintC.statusBtnManual[2] = statusBtn;
             }
         });
@@ -270,7 +321,7 @@ public class Window extends JFrame{
         btnAvalValve.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeStatusBtn(btnAvalValve, "valve");
+                changeStatusBtn(btnAvalValve, "valve", panelValveAvalStatus, labelStatusValveAval);
                 paintC.statusBtnManual[3] = statusBtn;
             }
         });
@@ -279,15 +330,19 @@ public class Window extends JFrame{
         getContentPane().add(panelButton, "South");
     }
 
-    public void changeStatusBtn(JButton button, String type){                                       //status = 1, ouvert; status = 2, fermé
+    public void changeStatusBtn(JButton button, String type, JPanel panelStatus, JLabel labelStatus){                                       //status = 1, ouvert; status = 2, fermé
 
         String txt = "";
 
         if(button.getText().charAt(0) == 'O'){
             txt = "Fermer la ";
+            panelStatus.setBackground(Color.green);
+            labelStatus.setText("Ouvert");
             statusBtn = 1;
         } else {
             txt = "Ouvrir la ";
+            panelStatus.setBackground(Color.red);
+            labelStatus.setText("Fermée");
             statusBtn = 0;
         }
 
@@ -299,8 +354,6 @@ public class Window extends JFrame{
 
         button.setText(txt);
     }
-
-    
 
     public void sendSpeed(PaintC paint){
         paint.speedElement[0] = (int)spinnerBoatAmont.getValue();

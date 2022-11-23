@@ -134,11 +134,20 @@ public class PaintC extends Component implements Runnable{
                     }
                 } 
 
-                if(floatBoat() && ((status == statusErreur.OKB1) || (status == statusErreur.OKB2))){                                                                   //si le boat a une bonne posY et qu'il n'y a pas de problème
-                    boat.moveBoatX(1);
+                if(floatBoat() && ((status == statusErreur.OKB1) || (status == statusErreur.OKB2))){                            //si le boat a une bonne posY et qu'il n'y a pas de problème
+                    if(boat.pos == -1){
+                        if(boat.posX <= maxWidth){
+                            boat.moveBoatX(1);
+                        }
+                    } else if (boat.pos == 1){
+                        if(boat.posX > -50){
+                            boat.moveBoatX(1);
+                        }
+                    }
+                
                 }
                 sleepTime = sleepTime(status);
-                Thread.sleep(sleepTime);                                                                                                //met en pause le thread
+                Thread.sleep(sleepTime);                                                                                        //met en pause le thread
                 repaint();
                 checkBoatStatus();
             } catch (Exception e) {

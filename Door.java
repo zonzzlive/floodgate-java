@@ -18,13 +18,12 @@ public class Door {
 
         height = 175;
         width = 10;
+        posY = 200;
 
         if(pos == 0){
             posX = (int)(maxWidth * 0.4);
-            posY = 200;
         } else if (pos == 1){
             posX = (int)(maxWidth * 0.6);
-            posY = 25;
         }
 
     }
