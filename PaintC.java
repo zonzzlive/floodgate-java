@@ -312,16 +312,31 @@ public class PaintC extends Component implements Runnable{
             }
         } else {
             if(checkRiverBoat() == 1){
-                if((boat.pos == -1) && (statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                    riverArray[1].moveRiverY(- moveRiverSpeed());
-                } else if ((boat.pos == 1) && (statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                    riverArray[1].moveRiverY(- moveRiverSpeed());
+                if(boat.pos == -1){
+                    if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
+                        riverArray[1].moveRiverY(-moveRiverSpeed());
+                    } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
+                        riverArray[1].moveRiverY(moveRiverSpeed());
+                    }
+                } else if (boat.pos == 1){
+                    if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
+                        riverArray[1].moveRiverY(-moveRiverSpeed());
+                    } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
+                        riverArray[1].moveRiverY(moveRiverSpeed());
+                    }
                 }
             } else {
-                if((boat.pos == 1) && (statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                    riverArray[1].moveRiverY(moveRiverSpeed());
-                } else if ((boat.pos == -1) && (statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                    riverArray[1].moveRiverY(moveRiverSpeed());
+                if(boat.pos == 1){
+                    if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
+                        riverArray[1].moveRiverY(moveRiverSpeed());
+                    } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
+                        riverArray[1].moveRiverY(-moveRiverSpeed());
+                    }
+                } else if (boat.pos == -1){
+                    if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
+                        riverArray[1].moveRiverY(moveRiverSpeed());
+                    } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
+                        riverArray[1].moveRiverY(-moveRiverSpeed());}
                 }
             }
         }
