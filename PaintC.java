@@ -273,6 +273,9 @@ public class PaintC extends Component implements Runnable{
         } else {
             if((checkStatus == 0) || (checkStatus == 1)){
                 door.moveDoorY(speed);
+            } else {
+                if(door.posY < 200 && door.posY > 25)
+                door.moveDoorY(-speed);
             }
         }
     }

@@ -115,10 +115,10 @@ public class Window extends JFrame{
 
         JButton btnAuto = new JButton("Automatique");
         btnAuto.setBounds(0,100,50,30);
-        btnAuto.setAlignmentX(panelAuto.CENTER_ALIGNMENT);
+        //btnAuto.setAlignmentX(panelAuto.CENTER_ALIGNMENT);
         JButton btnSaveSpeed = new JButton("Sauvegarder vitesse");
         btnSaveSpeed.setBounds(0,100,50,30);
-        btnSaveSpeed.setAlignmentX(panelAuto.CENTER_ALIGNMENT);
+        //btnSaveSpeed.setAlignmentX(panelAuto.CENTER_ALIGNMENT);
 
         JButton btnAmontBoat = new JButton("Ajout bateau");
         btnAmontBoat.setBounds(0,100,50,30);
