@@ -16,6 +16,8 @@ public class PaintC extends Component implements Runnable{
     int[] statusBtnManual;
     int[] speedElement;
 
+    int[] statusBtnPanne;
+
     int maxHeight;
     int maxWidth;
 
@@ -41,10 +43,20 @@ public class PaintC extends Component implements Runnable{
         this.door2 = door2;
 
         statusBtnManual = new int[4];
-        statusBtnManual[0] = 0;                                                                       //porte 1;  = 0, fermé; = 1; ouvert
-        statusBtnManual[1] = 0;                                                                       //porte 2;  = 0, fermé; = 1; ouvert
-        statusBtnManual[2] = 0;                                                                       //vanne 1;  = 0, fermé; = 1; ouvert
-        statusBtnManual[3] = 0;                                                                       //vanne 2;  = 0, fermé; = 1; ouvert
+        statusBtnManual[0] = 0;                                                                       //porte 1;  = 0, fermé; = 1, ouvert
+        statusBtnManual[1] = 0;                                                                       //porte 2;  = 0, fermé; = 1, ouvert
+        statusBtnManual[2] = 0;                                                                       //vanne 1;  = 0, fermé; = 1, ouvert
+        statusBtnManual[3] = 0;                                                                       //vanne 2;  = 0, fermé; = 1, ouvert
+
+        statusBtnPanne = new int[8];
+        statusBtnPanne[0] = 1;                                                                        //moteur boat 1;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[1] = 1;                                                                        //moteur boat 2;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[2] = 1;                                                                        //capteur boat 1;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[3] = 1;                                                                        //capteur boat 2;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[4] = 1;                                                                        //moteur door 1;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[5] = 1;                                                                        //moteur door 2;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[6] = 1;                                                                        //moteur valve 1;  = 0, panne; = 1, pas de panne
+        statusBtnPanne[7] = 1;                                                                        //moteur valve 2;  = 0, panne; = 1, pas de panne
 
         speedElement = new int[6];
     
@@ -64,6 +76,7 @@ public class PaintC extends Component implements Runnable{
     public void paint(Graphics gc)                                                                                  //fonction en charge de "dessiner" la cible
     {
         //System.out.println("test paint");
+        super.paint(gc);
         Graphics g2 = (Graphics) gc;
 
         g2.setColor(Color.lightGray);
@@ -113,20 +126,20 @@ public class PaintC extends Component implements Runnable{
                         if(checkCloseDoor() != 0){                                                                              //les deux portes ne sont pas fermées
                             if(checkCloseDoor() == 1){  
                                 status = statusErreur.COLLISIOND1;                                                              //la porte 1 est ouverte
-                                moveDoorYR(door1, 1);
+                                moveDoorYR(door1, statusBtnPanne[4]);
                             } else if (checkCloseDoor() == 2){                                                                  //la porte 2 est ouverte
                                 status = statusErreur.COLLISIOND2;
-                                moveDoorYR(door2, 1);
+                                moveDoorYR(door2, statusBtnPanne[5]);
                             }
                         } else {                                                                                                //les deux portes sont fermées
                             moveRiver();
                         }    
                     } else {
                         if((collisionDetection() == 1) && !checkDoorHeight(door1)){                                             //si collision sur la porte 1
-                            moveDoorYR(door1, -1);
+                            moveDoorYR(door1, -statusBtnPanne[4]);
                             status = statusErreur.COLLISIOND1;
                         } else if ((collisionDetection() == 2) && !checkDoorHeight(door2)){                                     //si collision sur la porte 2
-                            moveDoorYR(door2, -1);
+                            moveDoorYR(door2, -statusBtnPanne[5]);
                             status = statusErreur.COLLISIOND2;
                         } else {
                             checkBoatStatus();
@@ -137,11 +150,11 @@ public class PaintC extends Component implements Runnable{
                 if(floatBoat() && ((status == statusErreur.OKB1) || (status == statusErreur.OKB2))){                            //si le boat a une bonne posY et qu'il n'y a pas de problème
                     if(boat.pos == -1){
                         if(boat.posX <= maxWidth){
-                            boat.moveBoatX(1);
+                            boat.moveBoatX(statusBtnPanne[0]);
                         }
                     } else if (boat.pos == 1){
                         if(boat.posX > -50){
-                            boat.moveBoatX(1);
+                            boat.moveBoatX(statusBtnPanne[1]);
                         }
                     }
                 
@@ -304,42 +317,45 @@ public class PaintC extends Component implements Runnable{
 
     public void moveRiver (){
 
-        if(statusAuto == "AUTO"){
-            if(checkRiverBoat() == 1){                                                                  //boat sur la rivière centrale
-                riverArray[1].moveRiverY(- moveRiverSpeed());
-            } else {                                                                                    //boat sur la rivière de gauche ou de droite
-                riverArray[1].moveRiverY(moveRiverSpeed());
-            }
-        } else {
-            if(checkRiverBoat() == 1){
-                if(boat.pos == -1){
-                    if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                        riverArray[1].moveRiverY(-moveRiverSpeed());
-                    } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
-                        riverArray[1].moveRiverY(moveRiverSpeed());
-                    }
-                } else if (boat.pos == 1){
-                    if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                        riverArray[1].moveRiverY(-moveRiverSpeed());
-                    } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
-                        riverArray[1].moveRiverY(moveRiverSpeed());
-                    }
+        if(statusBtnPanne[6] == 1 || statusBtnPanne[7] == 1){
+            if(statusAuto == "AUTO"){
+                if(checkRiverBoat() == 1){                                                                  //boat sur la rivière centrale
+                    riverArray[1].moveRiverY(- moveRiverSpeed());
+                } else {                                                                                    //boat sur la rivière de gauche ou de droite
+                    riverArray[1].moveRiverY(moveRiverSpeed());
                 }
             } else {
-                if(boat.pos == 1){
-                    if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                        riverArray[1].moveRiverY(moveRiverSpeed());
-                    } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
-                        riverArray[1].moveRiverY(-moveRiverSpeed());
+                if(checkRiverBoat() == 1){
+                    if(boat.pos == -1){
+                        if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
+                            riverArray[1].moveRiverY(-moveRiverSpeed());
+                        } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
+                            riverArray[1].moveRiverY(moveRiverSpeed());
+                        }
+                    } else if (boat.pos == 1){
+                        if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
+                            riverArray[1].moveRiverY(-moveRiverSpeed());
+                        } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
+                            riverArray[1].moveRiverY(moveRiverSpeed());
+                        }
                     }
-                } else if (boat.pos == -1){
-                    if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                        riverArray[1].moveRiverY(moveRiverSpeed());
-                    } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
-                        riverArray[1].moveRiverY(-moveRiverSpeed());}
+                } else {
+                    if(boat.pos == 1){
+                        if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
+                            riverArray[1].moveRiverY(moveRiverSpeed());
+                        } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
+                            riverArray[1].moveRiverY(-moveRiverSpeed());
+                        }
+                    } else if (boat.pos == -1){
+                        if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
+                            riverArray[1].moveRiverY(moveRiverSpeed());
+                        } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
+                            riverArray[1].moveRiverY(-moveRiverSpeed());}
+                    }
                 }
             }
         }
+        
     }
 
     public int moveRiverSpeed(){

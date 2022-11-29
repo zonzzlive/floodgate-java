@@ -34,11 +34,7 @@ public class River{
     }
 
     public void moveRiverY(int speed){
-        System.out.println(this.posY);
-        System.out.println(speed);
-        System.out.println("-----------------------");
         if((this.posY <= 300 && speed == -1 && this.posY > 250) || (this.posY >= 250 && speed == 1 && this.posY < 300)){
-            System.out.println("oui");
             posY += speed;
         }
         

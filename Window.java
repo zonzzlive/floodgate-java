@@ -10,6 +10,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.lang.model.util.AbstractAnnotationValueVisitor14;
 import javax.swing.BoxLayout;
 
 
@@ -61,6 +62,8 @@ public class Window extends JFrame{
 
         //-----------------------------JPANEL PART-----------------------------
 
+            //--------------------------BOAT--------------------------------
+
         JPanel panelBoatAmont = new JPanel();
         panelBoatAmont.setBounds(0,0,50,30); 
         panelBoatAmont.setLayout(new BoxLayout(panelBoatAmont, BoxLayout.Y_AXIS));
@@ -69,6 +72,7 @@ public class Window extends JFrame{
         panelBoatAval.setBounds(0,0,50,30); 
         panelBoatAval.setLayout(new BoxLayout(panelBoatAval, BoxLayout.Y_AXIS));
 
+            //--------------------------DOOR--------------------------------
 
         JPanel panelDoorAmont = new JPanel();
         panelDoorAmont.setBounds(0,0,50,30); 
@@ -78,6 +82,7 @@ public class Window extends JFrame{
         panelDoorAval.setBounds(0,0,50,30); 
         panelDoorAval.setLayout(new BoxLayout(panelDoorAval, BoxLayout.Y_AXIS));
 
+            //--------------------------VALVE--------------------------------
 
         JPanel panelValveAmont = new JPanel();
         panelValveAmont.setBounds(0,0,50,30);
@@ -87,7 +92,20 @@ public class Window extends JFrame{
         panelValveAval.setBounds(0,0,50,30); 
         panelValveAval.setLayout(new BoxLayout(panelValveAval, BoxLayout.Y_AXIS));
 
+
         //-----------------------------JPANEL INDICATOR PART-----------------------------
+
+            //--------------------------BOAT--------------------------------
+
+        JPanel panelBoatAmontIssueStatus = new JPanel();
+        panelBoatAmontIssueStatus.setBounds(0,0,50,30);
+        panelBoatAmontIssueStatus.setBackground(Color.green);
+
+        JPanel panelBoatAvalIssueStatus = new JPanel();
+        panelBoatAvalIssueStatus.setBounds(0,0,50,30);
+        panelBoatAvalIssueStatus.setBackground(Color.green);
+
+            //--------------------------DOOR--------------------------------
 
         JPanel panelDoorAmontStatus = new JPanel();
         panelDoorAmontStatus.setBounds(0,0,50,30);
@@ -97,6 +115,15 @@ public class Window extends JFrame{
         panelDoorAvalStatus.setBounds(0,0,50,30);
         panelDoorAvalStatus.setBackground(Color.red);
 
+        JPanel panelDoorAmontIssueStatus = new JPanel();
+        panelDoorAmontIssueStatus.setBounds(0,0,50,30);
+        panelDoorAmontIssueStatus.setBackground(Color.green);
+
+        JPanel panelDoorAvalIssueStatus = new JPanel();
+        panelDoorAvalIssueStatus.setBounds(0,0,50,30);
+        panelDoorAvalIssueStatus.setBackground(Color.green);
+
+            //--------------------------VALVE--------------------------------
 
         JPanel panelValveAmontStatus = new JPanel();
         panelValveAmontStatus.setBounds(0,0,50,30);
@@ -106,53 +133,97 @@ public class Window extends JFrame{
         panelValveAvalStatus.setBounds(0,0,50,30);
         panelValveAvalStatus.setBackground(Color.red);
 
+        JPanel panelValveAmontIssueStatus = new JPanel();
+        panelValveAmontIssueStatus.setBounds(0,0,50,30);
+        panelValveAmontIssueStatus.setBackground(Color.green);
+
+        JPanel panelValveAvalIssueStatus = new JPanel();
+        panelValveAvalIssueStatus.setBounds(0,0,50,30);
+        panelValveAvalIssueStatus.setBackground(Color.green);
+
+            //--------------------------MODE--------------------------------
 
         JPanel panelModeStatus = new JPanel();
         panelModeStatus.setBounds(0,0,50,30);
         panelModeStatus.setBackground(Color.orange);
 
+
         //-----------------------------JBUTTON PART-----------------------------
 
         JButton btnAuto = new JButton("Automatique");
-        btnAuto.setBounds(0,100,50,30);
-        //btnAuto.setAlignmentX(panelAuto.CENTER_ALIGNMENT);
+        btnAuto.setBounds(0,0,50,30);
         JButton btnSaveSpeed = new JButton("Sauvegarder vitesse");
-        btnSaveSpeed.setBounds(0,100,50,30);
-        //btnSaveSpeed.setAlignmentX(panelAuto.CENTER_ALIGNMENT);
+        btnSaveSpeed.setBounds(0,0,50,30);
+
+            //--------------------------BOAT--------------------------------
 
         JButton btnAmontBoat = new JButton("Ajout bateau");
-        btnAmontBoat.setBounds(0,100,50,30);
+        btnAmontBoat.setBounds(0,0,50,30);
+        JButton btnAmontBoatIssue = new JButton("Activer panne moteur");
+        btnAmontBoatIssue.setBounds(0,0,50,30);
+
         JButton btnAvalBoat = new JButton("Ajout bateau");
-        btnAvalBoat.setBounds(width,100,50,30);
+        btnAvalBoat.setBounds(width,0,50,30);
+        JButton btnAvalBoatIssue = new JButton("Activer panne moteur");
+        btnAvalBoatIssue.setBounds(0,0,50,30);
 
-            
+            //--------------------------DOOR--------------------------------    
+
         JButton btnAmontDoor = new JButton("Ouvrir la porte");
-        btnAmontDoor.setBounds(0,100,50,30);
-        JButton btnAvalDoor = new JButton("Ouvrir la porte");
-        btnAvalDoor.setBounds(0,100,50,30);
+        btnAmontDoor.setBounds(0,0,50,30);
+        JButton btnAmontDoorIssue = new JButton("Activer panne moteur");
+        btnAmontDoorIssue.setBounds(0,0,50,30);
 
+        JButton btnAvalDoor = new JButton("Ouvrir la porte");
+        btnAvalDoor.setBounds(0,0,50,30);
+        JButton btnAvalDoorIssue = new JButton("Activer panne moteur");
+        btnAvalDoorIssue.setBounds(0,0,50,30);
+
+            //--------------------------VALVE--------------------------------
         
         JButton btnAmontValve = new JButton("Ouvrir la vanne");
-        btnAmontValve.setBounds(width,100,50,30);
+        btnAmontValve.setBounds(width,0,50,30);
+        JButton btnAmontValveIssue = new JButton("Activer panne moteur");
+        btnAmontDoorIssue.setBounds(0,0,50,30);
+
         JButton btnAvalValve = new JButton("Ouvrir la vanne");
-        btnAvalValve.setBounds(width,100,50,30);
+        btnAvalValve.setBounds(width,0,50,30);
+        JButton btnAvalValveIssue = new JButton("Activer panne moteur");
+        btnAmontDoorIssue.setBounds(0,0,50,30);
 
         //-----------------------------LABEL PART-----------------------------
+
+            //--------------------------BOAT--------------------------------
+
+        JLabel labelIssueBoatAmont = new JLabel("Panne désactivée", JLabel.LEFT);
+        JLabel labelIssueBoatAval = new JLabel("Panne désactivée", JLabel.LEFT);
 
         JLabel labelSpeedBoatAmont = new JLabel("Vitesse du bateau :", JLabel.LEFT);
         JLabel labelSpeedBoatAval = new JLabel("Vitesse du bateau :", JLabel.LEFT);
         
+            //--------------------------DOOR--------------------------------
+
+        JLabel labelIssueDoorAmont = new JLabel("Panne désactivée", JLabel.LEFT);
+        JLabel labelIssueDoorAval = new JLabel("Panne désactivée", JLabel.LEFT);
+
         JLabel labelSpeedDoorAmont = new JLabel("Vitesse de la porte :", JLabel.LEFT);
         JLabel labelSpeedDoorAval = new JLabel("Vitesse de la porte :", JLabel.LEFT);
-        
-        JLabel labelSpeedValveAmont = new JLabel("Vitesse de la valve :", JLabel.LEFT);
-        JLabel labelSpeedValveAval = new JLabel("Vitesse de la valve :", JLabel.LEFT);
 
         JLabel labelStatusDoorAmont = new JLabel("Fermé", JLabel.LEFT);
         JLabel labelStatusDoorAval = new JLabel("Fermé", JLabel.LEFT);
 
+            //--------------------------VALVE--------------------------------
+        
+        JLabel labelIssueValveAmont = new JLabel("Panne désactivée", JLabel.LEFT);
+        JLabel labelIssueValveAval = new JLabel("Panne désactivée", JLabel.LEFT);
+
+        JLabel labelSpeedValveAmont = new JLabel("Vitesse de la valve :", JLabel.LEFT);
+        JLabel labelSpeedValveAval = new JLabel("Vitesse de la valve :", JLabel.LEFT);
+
         JLabel labelStatusValveAmont = new JLabel("Fermé", JLabel.LEFT);
         JLabel labelStatusValveAval = new JLabel("Fermé", JLabel.LEFT);
+
+            //--------------------------MODE--------------------------------
 
         JLabel labelStatusMode = new JLabel("Manuel", JLabel.LEFT);
 
@@ -191,25 +262,43 @@ public class Window extends JFrame{
 
         PaintC paintC = new PaintC(width, height, riverArray, trafficLights, valves, boat, door1, door2);
         sendSpeed(paintC);
-        new Thread(paintC).start();
+
+        getContentPane().add(paintC, "Center");
+        getContentPane().add(panelButton, "South");
 
         //-----------------------------PANEL ADD PART-----------------------------
 
             //-----------------------------AMONT PART-----------------------------
 
+            //--------------------------BOAT--------------------------------
+
+        panelBoatAmontIssueStatus.add(labelIssueBoatAmont);
+
+        panelBoatAmont.add(panelBoatAmontIssueStatus);
+        panelBoatAmont.add(btnAmontBoatIssue);
         panelBoatAmont.add(labelSpeedBoatAmont);
         panelBoatAmont.add(spinnerBoatAmont);
         panelBoatAmont.add(btnAmontBoat);
+        
+            //--------------------------DOOR--------------------------------
 
         panelDoorAmontStatus.add(labelStatusDoorAmont);
+        panelDoorAmontIssueStatus.add(labelIssueDoorAmont);
         
+        panelDoorAmont.add(panelDoorAmontIssueStatus);
+        panelDoorAmont.add(btnAmontDoorIssue);
         panelDoorAmont.add(panelDoorAmontStatus);
         panelDoorAmont.add(labelSpeedDoorAmont);
         panelDoorAmont.add(spinnerDoorAmont);
         panelDoorAmont.add(btnAmontDoor);
         
+            //--------------------------VALVE--------------------------------
+
         panelValveAmontStatus.add(labelStatusValveAmont);
+        panelValveAmontIssueStatus.add(labelIssueValveAmont);
         
+        panelValveAmont.add(panelValveAmontIssueStatus);
+        panelValveAmont.add(btnAmontValveIssue);
         panelValveAmont.add(panelValveAmontStatus);
         panelValveAmont.add(labelSpeedValveAmont);
         panelValveAmont.add(spinnerValveAmont);
@@ -229,19 +318,35 @@ public class Window extends JFrame{
 
             //-----------------------------AVAL PART-----------------------------
 
+            //--------------------------BOAT--------------------------------
+
+        panelBoatAvalIssueStatus.add(labelIssueBoatAval);
+
         panelBoatAval.add(labelSpeedBoatAval);
         panelBoatAval.add(spinnerBoatAval);
+        panelBoatAval.add(panelBoatAvalIssueStatus);
+        panelBoatAval.add(btnAvalBoatIssue);
         panelBoatAval.add(btnAvalBoat);
 
+            //--------------------------DOOR--------------------------------
+
         panelDoorAvalStatus.add(labelStatusDoorAval);
+        panelDoorAvalIssueStatus.add(labelIssueDoorAval);
         
+        panelDoorAval.add(panelDoorAvalIssueStatus);
+        panelDoorAval.add(btnAvalDoorIssue);
         panelDoorAval.add(panelDoorAvalStatus);
         panelDoorAval.add(labelSpeedDoorAval);
         panelDoorAval.add(spinnerDoorAval);
         panelDoorAval.add(btnAvalDoor);
 
+            //--------------------------VALVE--------------------------------
+
         panelValveAvalStatus.add(labelStatusValveAval);
+        panelValveAvalIssueStatus.add(labelIssueValveAval);
         
+        panelValveAval.add(panelValveAvalIssueStatus);
+        panelValveAval.add(btnAvalValveIssue);
         panelValveAval.add(panelValveAvalStatus);
         panelValveAval.add(labelSpeedValveAval);
         panelValveAval.add(spinnerValveAval);
@@ -250,6 +355,8 @@ public class Window extends JFrame{
         panelAval.add(panelBoatAval);
         panelAval.add(panelDoorAval);
         panelAval.add(panelValveAval);
+
+            //--------------------------ASSEMBLE--------------------------------
 
         panelButton.add(panelAmont);
         panelButton.add(panelAuto);
@@ -326,8 +433,56 @@ public class Window extends JFrame{
             }
         });
 
-        getContentPane().add(paintC, "Center");
-        getContentPane().add(panelButton, "South");
+        btnAmontBoatIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAmontBoatIssue, "Issue", panelBoatAmontIssueStatus, labelIssueBoatAmont);
+                paintC.statusBtnPanne[0] = statusBtn;
+            }
+        });
+
+        btnAvalBoatIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAvalBoatIssue, "Issue", panelBoatAvalIssueStatus, labelIssueBoatAval);
+                paintC.statusBtnPanne[1] = statusBtn;
+            }
+        });
+
+        btnAmontDoorIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAmontDoorIssue, "Issue", panelDoorAmontIssueStatus, labelIssueDoorAmont);
+                paintC.statusBtnPanne[4] = statusBtn;
+            }
+        });
+
+        btnAvalDoorIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAvalDoorIssue, "Issue", panelDoorAvalIssueStatus, labelIssueDoorAval);
+                paintC.statusBtnPanne[5] = statusBtn;
+            }
+        });
+
+        btnAmontValveIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAmontValveIssue, "Issue", panelValveAmontIssueStatus, labelIssueValveAmont);
+                paintC.statusBtnPanne[6] = statusBtn;
+            }
+        });
+
+        btnAvalValveIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAvalValveIssue, "Issue", panelValveAvalIssueStatus, labelIssueValveAval);
+                paintC.statusBtnPanne[7] = statusBtn;
+            }
+        });
+        
+        new Thread(paintC).start();
+
     }
 
     public void changeStatusBtn(JButton button, String type, JPanel panelStatus, JLabel labelStatus){                                       //status = 1, ouvert; status = 2, fermé
@@ -339,16 +494,26 @@ public class Window extends JFrame{
             panelStatus.setBackground(Color.green);
             labelStatus.setText("Ouvert");
             statusBtn = 1;
-        } else {
+        } else if(button.getText().charAt(0) == 'F'){
             txt = "Ouvrir la ";
             panelStatus.setBackground(Color.red);
             labelStatus.setText("Fermée");
             statusBtn = 0;
+        } else if(button.getText().charAt(0) == 'A'){
+            txt = "Désactiver panne moteur";
+            panelStatus.setBackground(Color.red);
+            labelStatus.setText("Panne activée");
+            statusBtn = 0;
+        } else if (button.getText().charAt(0) == 'D'){
+            txt = "Activer panne moteur";
+            panelStatus.setBackground(Color.green);
+            labelStatus.setText("Panne desactivée");
+            statusBtn = 1;
         }
 
         if(type == "door"){
             txt += "porte";
-        } else {
+        } else if(type == "valve") {
             txt += "vanne";
         }
 
