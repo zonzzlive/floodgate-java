@@ -19,24 +19,24 @@ public class Window extends JFrame{
 
     //-----------------------------SPINNER PART-----------------------------
 
-    SpinnerModel spinnerBoatAmontM = new SpinnerNumberModel(50, 1, 100, 1);     
+    SpinnerModel spinnerBoatAmontM = new SpinnerNumberModel(100, 1, 100, 1);     
     JSpinner spinnerBoatAmont = new JSpinner(spinnerBoatAmontM);
 
-    SpinnerModel spinnerBoatAvalM = new SpinnerNumberModel(50, 1, 100, 1);        
+    SpinnerModel spinnerBoatAvalM = new SpinnerNumberModel(100, 1, 100, 1);        
     JSpinner spinnerBoatAval = new JSpinner(spinnerBoatAvalM);
 
         
-    SpinnerModel spinnerDoorAmontM = new SpinnerNumberModel(50, 1, 100, 1);  
+    SpinnerModel spinnerDoorAmontM = new SpinnerNumberModel(85, 1, 100, 1);  
     JSpinner spinnerDoorAmont = new JSpinner(spinnerDoorAmontM);      
 
-    SpinnerModel spinnerDoorAvalM = new SpinnerNumberModel(50, 1, 100, 1);
+    SpinnerModel spinnerDoorAvalM = new SpinnerNumberModel(85, 1, 100, 1);
     JSpinner spinnerDoorAval = new JSpinner(spinnerDoorAvalM);
 
         
-    SpinnerModel spinnerValveAmontM = new SpinnerNumberModel(50, 1, 100, 1);  
+    SpinnerModel spinnerValveAmontM = new SpinnerNumberModel(85, 1, 100, 1);  
     JSpinner spinnerValveAmont = new JSpinner(spinnerValveAmontM);
         
-    SpinnerModel spinnerValveAvalM = new SpinnerNumberModel(50, 1, 100, 1);       
+    SpinnerModel spinnerValveAvalM = new SpinnerNumberModel(85, 1, 100, 1);       
     JSpinner spinnerValveAval = new JSpinner(spinnerValveAvalM);
 
     public Window (int width, int height){

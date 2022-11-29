@@ -153,7 +153,7 @@ public class PaintC extends Component implements Runnable{
                             boat.moveBoatX(statusBtnPanne[0]);
                         }
                     } else if (boat.pos == 1){
-                        if(boat.posX > -30 && boat.posX != maxWidth + 31){
+                        if(boat.posX > -50 && boat.posX != maxWidth + 31){
                             boat.moveBoatX(statusBtnPanne[1]);
                         }
                     }
@@ -346,8 +346,10 @@ public class PaintC extends Component implements Runnable{
         if(statusAuto == "AUTO"){
             if(checkRiverBoat() == 1){                                                                  //boat sur la rivière centrale
                 riverArray[1].moveRiverY(moveRiverSpeed(0));
-            } else {                                                                                    //boat sur la rivière de gauche ou de droite
-                riverArray[1].moveRiverY(moveRiverSpeed(0));
+            } else if(checkRiverBoat() == 0){                                                           //boat sur la rivière de gauche
+                riverArray[1].moveRiverY(moveRiverSpeed(3021));
+            } else if(checkRiverBoat() == 2){                                                           //boat sur la rivière de droite
+                riverArray[1].moveRiverY(moveRiverSpeed(3120));
             }
         } else {
             if(checkRiverBoat() == 1){
@@ -378,9 +380,9 @@ public class PaintC extends Component implements Runnable{
         if(checkRiverBoat() == -1){
             return -boat.pos;
         } else if(checkRiverBoat() == 0){
-            return boat.pos * statusBtnPanne[6];
+            return -valveIssueGestion(valveCombinaison);
         } else if (checkRiverBoat() == 2){
-            return boat.pos * statusBtnPanne[7];
+            return -valveIssueGestion(valveCombinaison);
         } else if(checkRiverBoat() == 1){
             if(valveCombinaison != 0){
                 return valveIssueGestion(valveCombinaison);
