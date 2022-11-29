@@ -10,7 +10,6 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.lang.model.util.AbstractAnnotationValueVisitor14;
 import javax.swing.BoxLayout;
 
 
@@ -105,6 +104,14 @@ public class Window extends JFrame{
         panelBoatAvalIssueStatus.setBounds(0,0,50,30);
         panelBoatAvalIssueStatus.setBackground(Color.green);
 
+        JPanel panelBoatAmontCaptorIssueStatus = new JPanel();
+        panelBoatAmontCaptorIssueStatus.setBounds(0,0,50,30);
+        panelBoatAmontCaptorIssueStatus.setBackground(Color.green);
+
+        JPanel panelBoatAvalCaptorIssueStatus = new JPanel();
+        panelBoatAvalCaptorIssueStatus.setBounds(0,0,50,30);
+        panelBoatAvalCaptorIssueStatus.setBackground(Color.green);
+
             //--------------------------DOOR--------------------------------
 
         JPanel panelDoorAmontStatus = new JPanel();
@@ -161,11 +168,15 @@ public class Window extends JFrame{
         btnAmontBoat.setBounds(0,0,50,30);
         JButton btnAmontBoatIssue = new JButton("Activer panne moteur");
         btnAmontBoatIssue.setBounds(0,0,50,30);
+        JButton btnAmontBoatCaptorIssue = new JButton("Activer panne capteur de collision");
+        btnAmontBoatCaptorIssue.setBounds(0,0,50,30);
 
         JButton btnAvalBoat = new JButton("Ajout bateau");
         btnAvalBoat.setBounds(width,0,50,30);
         JButton btnAvalBoatIssue = new JButton("Activer panne moteur");
         btnAvalBoatIssue.setBounds(0,0,50,30);
+        JButton btnAvalBoatCaptorIssue = new JButton("Activer panne capteur de collision");
+        btnAvalBoatCaptorIssue.setBounds(0,0,50,30);
 
             //--------------------------DOOR--------------------------------    
 
@@ -197,6 +208,9 @@ public class Window extends JFrame{
 
         JLabel labelIssueBoatAmont = new JLabel("Panne désactivée", JLabel.LEFT);
         JLabel labelIssueBoatAval = new JLabel("Panne désactivée", JLabel.LEFT);
+        
+        JLabel labelCaptorIssueBoatAmont = new JLabel("Panne désactivée", JLabel.LEFT);
+        JLabel labelCaptorIssueBoatAval = new JLabel("Panne désactivée", JLabel.LEFT);
 
         JLabel labelSpeedBoatAmont = new JLabel("Vitesse du bateau :", JLabel.LEFT);
         JLabel labelSpeedBoatAval = new JLabel("Vitesse du bateau :", JLabel.LEFT);
@@ -273,7 +287,10 @@ public class Window extends JFrame{
             //--------------------------BOAT--------------------------------
 
         panelBoatAmontIssueStatus.add(labelIssueBoatAmont);
+        panelBoatAmontCaptorIssueStatus.add(labelCaptorIssueBoatAmont);
 
+        panelBoatAmont.add(panelBoatAmontCaptorIssueStatus);
+        panelBoatAmont.add(btnAmontBoatCaptorIssue);
         panelBoatAmont.add(panelBoatAmontIssueStatus);
         panelBoatAmont.add(btnAmontBoatIssue);
         panelBoatAmont.add(labelSpeedBoatAmont);
@@ -321,7 +338,10 @@ public class Window extends JFrame{
             //--------------------------BOAT--------------------------------
 
         panelBoatAvalIssueStatus.add(labelIssueBoatAval);
+        panelBoatAvalCaptorIssueStatus.add(labelCaptorIssueBoatAval);
 
+        panelBoatAval.add(panelBoatAvalCaptorIssueStatus);
+        panelBoatAval.add(btnAvalBoatCaptorIssue);
         panelBoatAval.add(panelBoatAvalIssueStatus);
         panelBoatAval.add(btnAvalBoatIssue);
         panelBoatAval.add(labelSpeedBoatAval);
@@ -436,7 +456,7 @@ public class Window extends JFrame{
         btnAmontBoatIssue.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                changeStatusBtn(btnAmontBoatIssue, "Issue", panelBoatAmontIssueStatus, labelIssueBoatAmont);
+                changeStatusBtn(btnAmontBoatIssue, "Engine", panelBoatAmontIssueStatus, labelIssueBoatAmont);
                 paintC.statusBtnPanne[0] = statusBtn;
             }
         });
@@ -444,15 +464,31 @@ public class Window extends JFrame{
         btnAvalBoatIssue.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                changeStatusBtn(btnAvalBoatIssue, "Issue", panelBoatAvalIssueStatus, labelIssueBoatAval);
+                changeStatusBtn(btnAvalBoatIssue, "Engine", panelBoatAvalIssueStatus, labelIssueBoatAval);
                 paintC.statusBtnPanne[1] = statusBtn;
+            }
+        });
+
+        btnAmontBoatCaptorIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAmontBoatCaptorIssue, "CollisionCaptor", panelBoatAmontCaptorIssueStatus, labelCaptorIssueBoatAmont);
+                paintC.statusBtnPanne[2] = statusBtn;
+            }
+        });
+
+        btnAvalBoatCaptorIssue.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                changeStatusBtn(btnAvalBoatCaptorIssue, "CollisionCaptor", panelBoatAvalCaptorIssueStatus, labelCaptorIssueBoatAval);
+                paintC.statusBtnPanne[3] = statusBtn;
             }
         });
 
         btnAmontDoorIssue.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                changeStatusBtn(btnAmontDoorIssue, "Issue", panelDoorAmontIssueStatus, labelIssueDoorAmont);
+                changeStatusBtn(btnAmontDoorIssue, "Engine", panelDoorAmontIssueStatus, labelIssueDoorAmont);
                 paintC.statusBtnPanne[4] = statusBtn;
             }
         });
@@ -460,7 +496,7 @@ public class Window extends JFrame{
         btnAvalDoorIssue.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                changeStatusBtn(btnAvalDoorIssue, "Issue", panelDoorAvalIssueStatus, labelIssueDoorAval);
+                changeStatusBtn(btnAvalDoorIssue, "Engine", panelDoorAvalIssueStatus, labelIssueDoorAval);
                 paintC.statusBtnPanne[5] = statusBtn;
             }
         });
@@ -468,7 +504,7 @@ public class Window extends JFrame{
         btnAmontValveIssue.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                changeStatusBtn(btnAmontValveIssue, "Issue", panelValveAmontIssueStatus, labelIssueValveAmont);
+                changeStatusBtn(btnAmontValveIssue, "Engine", panelValveAmontIssueStatus, labelIssueValveAmont);
                 paintC.statusBtnPanne[6] = statusBtn;
             }
         });
@@ -476,7 +512,7 @@ public class Window extends JFrame{
         btnAvalValveIssue.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                changeStatusBtn(btnAvalValveIssue, "Issue", panelValveAvalIssueStatus, labelIssueValveAval);
+                changeStatusBtn(btnAvalValveIssue, "Engine", panelValveAvalIssueStatus, labelIssueValveAval);
                 paintC.statusBtnPanne[7] = statusBtn;
             }
         });
@@ -500,12 +536,12 @@ public class Window extends JFrame{
             labelStatus.setText("Fermée");
             statusBtn = 0;
         } else if(button.getText().charAt(0) == 'A'){
-            txt = "Désactiver panne moteur";
+            txt = "Désactiver panne ";
             panelStatus.setBackground(Color.red);
             labelStatus.setText("Panne activée");
             statusBtn = 0;
         } else if (button.getText().charAt(0) == 'D'){
-            txt = "Activer panne moteur";
+            txt = "Activer panne ";
             panelStatus.setBackground(Color.green);
             labelStatus.setText("Panne desactivée");
             statusBtn = 1;
@@ -515,6 +551,10 @@ public class Window extends JFrame{
             txt += "porte";
         } else if(type == "valve") {
             txt += "vanne";
+        } else if (type == "Engine") {
+            txt += "moteur";
+        } else if (type == "CollisionCaptor") {
+            txt += "capteur de collision";
         }
 
         button.setText(txt);
