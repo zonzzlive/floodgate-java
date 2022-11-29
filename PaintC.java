@@ -317,53 +317,65 @@ public class PaintC extends Component implements Runnable{
 
     public void moveRiver (){
 
-        if(statusBtnPanne[6] == 1 || statusBtnPanne[7] == 1){
-            if(statusAuto == "AUTO"){
-                if(checkRiverBoat() == 1){                                                                  //boat sur la rivière centrale
-                    riverArray[1].moveRiverY(- moveRiverSpeed());
-                } else {                                                                                    //boat sur la rivière de gauche ou de droite
-                    riverArray[1].moveRiverY(moveRiverSpeed());
-                }
+        if(statusAuto == "AUTO"){
+            if(checkRiverBoat() == 1){                                                                  //boat sur la rivière centrale
+                riverArray[1].moveRiverY(moveRiverSpeed(0));
+            } else {                                                                                    //boat sur la rivière de gauche ou de droite
+                riverArray[1].moveRiverY(moveRiverSpeed(0));
+            }
+        } else {
+            if(checkRiverBoat() == 1){
+                checkBtnRiver(-1);
             } else {
-                if(checkRiverBoat() == 1){
-                    if(boat.pos == -1){
-                        if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                            riverArray[1].moveRiverY(-moveRiverSpeed());
-                        } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
-                            riverArray[1].moveRiverY(moveRiverSpeed());
-                        }
-                    } else if (boat.pos == 1){
-                        if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                            riverArray[1].moveRiverY(-moveRiverSpeed());
-                        } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
-                            riverArray[1].moveRiverY(moveRiverSpeed());
-                        }
-                    }
-                } else {
-                    if(boat.pos == 1){
-                        if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){
-                            riverArray[1].moveRiverY(moveRiverSpeed());
-                        } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){
-                            riverArray[1].moveRiverY(-moveRiverSpeed());
-                        }
-                    } else if (boat.pos == -1){
-                        if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){
-                            riverArray[1].moveRiverY(moveRiverSpeed());
-                        } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){
-                            riverArray[1].moveRiverY(-moveRiverSpeed());}
-                    }
-                }
+                checkBtnRiver(1);
             }
         }
-        
     }
 
-    public int moveRiverSpeed(){
+    public void checkBtnRiver(int i){
+        if(boat.pos == 1){
+            if((statusBtnManual[3] == 1) && (statusBtnManual[2] == 0)){                          //valve 1 fermée, valve 2 ouverte
+                riverArray[1].moveRiverY(i * moveRiverSpeed(3120));
+            } else if((statusBtnManual[3] == 0) && (statusBtnManual[2] == 1)){                   //valve 1 ouverte, valve 2 fermée
+                riverArray[1].moveRiverY(i * -moveRiverSpeed(3021));
+            }
+        } else if (boat.pos == -1){
+            if((statusBtnManual[2] == 1) && (statusBtnManual[3] == 0)){                         //valve 1 ouverte, valve 2 fermée
+                riverArray[1].moveRiverY(i * moveRiverSpeed(3021));
+            } else if((statusBtnManual[2] == 0) && (statusBtnManual[3] == 1)){                  //valve 1 fermée, valve 2 ouverte
+                riverArray[1].moveRiverY(i * -moveRiverSpeed(3120));
+            }
+        }
+    }
+
+    public int moveRiverSpeed(int valveCombinaison){
         if(checkRiverBoat() == -1){
             return -boat.pos;
-        } else {
-            return boat.pos;
+        } else if(checkRiverBoat() == 0){
+            return boat.pos * statusBtnPanne[6];
+        } else if (checkRiverBoat() == 2){
+            return boat.pos * statusBtnPanne[7];
+        } else if(checkRiverBoat() == 1){
+            return valveIssueGestion(valveCombinaison);
         }
+        return 0;
+    }
+
+    public int valveIssueGestion(int valveCombinaison){
+        if(collisionDetection() == 1){
+            if(valveCombinaison == 3021){
+                return -boat.pos * statusBtnPanne[6];
+            } else if (valveCombinaison == 3120){
+                return -boat.pos * statusBtnPanne[7];
+            }
+        } else if (collisionDetection() == 2){
+            if(valveCombinaison == 3021){
+                return -boat.pos * statusBtnPanne[6];
+            } else if (valveCombinaison == 3120){
+                return -boat.pos * statusBtnPanne[7];
+            }
+        }
+        return 0;
     }
 
     public void checkValveStatus(){

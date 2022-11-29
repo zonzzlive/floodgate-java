@@ -322,10 +322,10 @@ public class Window extends JFrame{
 
         panelBoatAvalIssueStatus.add(labelIssueBoatAval);
 
-        panelBoatAval.add(labelSpeedBoatAval);
-        panelBoatAval.add(spinnerBoatAval);
         panelBoatAval.add(panelBoatAvalIssueStatus);
         panelBoatAval.add(btnAvalBoatIssue);
+        panelBoatAval.add(labelSpeedBoatAval);
+        panelBoatAval.add(spinnerBoatAval);
         panelBoatAval.add(btnAvalBoat);
 
             //--------------------------DOOR--------------------------------
