@@ -13,9 +13,15 @@ import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 
 
-public class Window extends JFrame{
+public class Window extends JFrame implements Runnable{
 
     int statusBtn;
+    PaintC paintT;
+
+    //--------------------------GENERAL--------------------------------
+
+    JPanel panelGeneralIssueStatus = new JPanel();
+    JLabel labelGeneralIssue = new JLabel("Pas de panne générale", JLabel.LEFT);
 
     //-----------------------------SPINNER PART-----------------------------
 
@@ -93,6 +99,11 @@ public class Window extends JFrame{
 
 
         //-----------------------------JPANEL INDICATOR PART-----------------------------
+
+            //--------------------------GENERAL--------------------------------
+
+        panelGeneralIssueStatus.setBounds(0,0,50,30);
+        panelGeneralIssueStatus.setBackground(Color.green);
 
             //--------------------------BOAT--------------------------------
 
@@ -275,6 +286,7 @@ public class Window extends JFrame{
         Door door2 = new Door(1, height, width);
 
         PaintC paintC = new PaintC(width, height, riverArray, trafficLights, valves, boat, door1, door2);
+        paintT = paintC;
         sendSpeed(paintC);
 
         getContentPane().add(paintC, "Center");
@@ -328,7 +340,9 @@ public class Window extends JFrame{
             //-----------------------------AUTO PART-----------------------------
 
         panelModeStatus.add(labelStatusMode);
+        panelGeneralIssueStatus.add(labelGeneralIssue);
         
+        panelAuto.add(panelGeneralIssueStatus);
         panelAuto.add(panelModeStatus);
         panelAuto.add(btnSaveSpeed);
         panelAuto.add(btnAuto);
@@ -567,6 +581,23 @@ public class Window extends JFrame{
         paint.speedElement[3] = (int)spinnerDoorAval.getValue();
         paint.speedElement[4] = (int)spinnerValveAmont.getValue();
         paint.speedElement[5] = (int)spinnerValveAval.getValue();
+    }
+
+    @Override
+    public void run(){ 
+        while(true){
+            if(paintT.boat.pos == 0){
+                panelGeneralIssueStatus.setBackground(Color.red);
+                labelGeneralIssue.setText("Panne générale, bateau dans une porte");
+            } else {
+                panelGeneralIssueStatus.setBackground(Color.green);
+                labelGeneralIssue.setText("Pas de panne générale");
+            }
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+            }
+        }
     }
 
 }

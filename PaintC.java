@@ -256,20 +256,22 @@ public class PaintC extends Component implements Runnable{
             collisionNb = 2;
         }
 
+        //System.out.println(boat.posX);
+
         if(collisionNb == 1){
             if(checkCloseDoor() != 1){
-                if(boat.posX == 660){                                               //boat.pos == -1
-                    boat.posX = maxWidth + 31; 
-                } else if(boat.posX == 700){                                        //boat.pos == 1
-                    boat.posX = maxWidth + 31; 
+                if(boat.posX == 728){                                               //boat.pos == -1
+                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31; 
+                } else if(boat.posX == 768){                                        //boat.pos == 1
+                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31; 
                 }
             }
         } else if(collisionNb == 2){
             if(checkCloseDoor() != 2){
-                if(boat.posX == 1010){                                              //boat.pos == -1
-                    boat.posX = maxWidth + 31; 
-                } else if(boat.posX == 1050){                                       //boat.pos == 1
-                    boat.posX = -81; 
+                if(boat.posX == 1112){                                              //boat.pos == -1
+                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31; 
+                } else if(boat.posX == 1152){                                       //boat.pos == 1
+                    boat.pos = 0;                                                           //boat.posX = -81; 
                 }
             }
         }
@@ -297,6 +299,9 @@ public class PaintC extends Component implements Runnable{
 
     public int checkCloseDoor(){                                                                        //return 0, les portes sont fermées; return 1, la porte 1 est ouverte; return 2, la porte 2 est ouverte
         if(door1.posY != 200){
+            if(door1.posY != 25){
+                
+            }
             return 1;
         } 
         if(door2.posY != 200){
