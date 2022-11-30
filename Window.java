@@ -18,6 +18,23 @@ public class Window extends JFrame implements Runnable{
     int statusBtn;
     PaintC paintT;
 
+    Valve[] valves;
+    Door[] doors;
+
+    JPanel panelDoorAmontStatus = new JPanel();
+    JPanel panelDoorAvalStatus = new JPanel();
+    JPanel panelValveAmontStatus = new JPanel();
+    JPanel panelValveAvalStatus = new JPanel();
+
+    JLabel labelStatusDoorAmont = new JLabel("Fermé", JLabel.LEFT);
+    JLabel labelStatusDoorAval = new JLabel("Fermé", JLabel.LEFT);
+    JLabel labelStatusValveAmont = new JLabel("Fermé", JLabel.LEFT);
+    JLabel labelStatusValveAval = new JLabel("Fermé", JLabel.LEFT);
+
+        //--------------------------MODE--------------------------------
+
+        JLabel labelStatusMode = new JLabel("Manuel", JLabel.LEFT);
+
     //--------------------------GENERAL--------------------------------
 
     JPanel panelGeneralIssueStatus = new JPanel();
@@ -125,11 +142,9 @@ public class Window extends JFrame implements Runnable{
 
             //--------------------------DOOR--------------------------------
 
-        JPanel panelDoorAmontStatus = new JPanel();
         panelDoorAmontStatus.setBounds(0,0,50,30);
         panelDoorAmontStatus.setBackground(Color.red);
 
-        JPanel panelDoorAvalStatus = new JPanel();
         panelDoorAvalStatus.setBounds(0,0,50,30);
         panelDoorAvalStatus.setBackground(Color.red);
 
@@ -143,11 +158,9 @@ public class Window extends JFrame implements Runnable{
 
             //--------------------------VALVE--------------------------------
 
-        JPanel panelValveAmontStatus = new JPanel();
         panelValveAmontStatus.setBounds(0,0,50,30);
         panelValveAmontStatus.setBackground(Color.red);
 
-        JPanel panelValveAvalStatus = new JPanel();
         panelValveAvalStatus.setBounds(0,0,50,30);
         panelValveAvalStatus.setBackground(Color.red);
 
@@ -234,9 +247,6 @@ public class Window extends JFrame implements Runnable{
         JLabel labelSpeedDoorAmont = new JLabel("Vitesse de la porte :", JLabel.LEFT);
         JLabel labelSpeedDoorAval = new JLabel("Vitesse de la porte :", JLabel.LEFT);
 
-        JLabel labelStatusDoorAmont = new JLabel("Fermé", JLabel.LEFT);
-        JLabel labelStatusDoorAval = new JLabel("Fermé", JLabel.LEFT);
-
             //--------------------------VALVE--------------------------------
         
         JLabel labelIssueValveAmont = new JLabel("Panne désactivée", JLabel.LEFT);
@@ -244,13 +254,6 @@ public class Window extends JFrame implements Runnable{
 
         JLabel labelSpeedValveAmont = new JLabel("Vitesse de la valve :", JLabel.LEFT);
         JLabel labelSpeedValveAval = new JLabel("Vitesse de la valve :", JLabel.LEFT);
-
-        JLabel labelStatusValveAmont = new JLabel("Fermé", JLabel.LEFT);
-        JLabel labelStatusValveAval = new JLabel("Fermé", JLabel.LEFT);
-
-            //--------------------------MODE--------------------------------
-
-        JLabel labelStatusMode = new JLabel("Manuel", JLabel.LEFT);
 
         //-----------------------------FRAME PART-----------------------------
         
@@ -274,7 +277,6 @@ public class Window extends JFrame implements Runnable{
         trafficLights[0] = new TrafficLight(0, height, width);
         trafficLights[1] = new TrafficLight(1, height, width);
 
-        Valve[] valves;
         valves = new Valve[2];
 
         valves[0] = new Valve(0, height, width);
@@ -282,8 +284,12 @@ public class Window extends JFrame implements Runnable{
 
         Boat boat = new Boat(-1, height, width);
 
+        doors = new Door[2];
+
         Door door1 = new Door(0, height, width);
         Door door2 = new Door(1, height, width);
+        doors[0] = door1;
+        doors[1] = door2;
 
         PaintC paintC = new PaintC(width, height, riverArray, trafficLights, valves, boat, door1, door2);
         paintT = paintC;
@@ -535,6 +541,58 @@ public class Window extends JFrame implements Runnable{
 
     }
 
+    public void componentStatus(){
+        for(Door d: doors){
+            checkDoorStatus(d);
+        }
+        for(Valve v: valves){
+            checkValveStatus(v);
+        }
+    }
+
+    public void checkDoorStatus(Door d){
+        if(d.pos == 0){
+            if(d.status == "Fermée"){
+                panelDoorAmontStatus.setBackground(Color.red);
+            } else if (d.status == "Ouverture" || d.status == "Fermeture"){
+                panelDoorAmontStatus.setBackground(Color.orange);
+            } else if (d.status == "Ouverte"){
+                panelDoorAmontStatus.setBackground(Color.green);
+            }
+            labelStatusDoorAmont.setText(d.status);
+        } else if (d.pos == 1){
+            if(d.status == "Fermée"){
+                panelDoorAvalStatus.setBackground(Color.red);
+            } else if (d.status == "Ouverture" || d.status == "Fermeture"){
+                panelDoorAvalStatus.setBackground(Color.orange);
+            } else if (d.status == "Ouverte"){
+                panelDoorAvalStatus.setBackground(Color.green);
+            }
+            labelStatusDoorAval.setText(d.status);
+        }
+    }
+
+    public void checkValveStatus(Valve v){
+        if(labelStatusMode.getText().charAt(0) == 'A'){
+            if(v.pos == 0){
+                if(v.status == "Fermée"){
+                    panelValveAmontStatus.setBackground(Color.red);
+                } else if (v.status == "Ouverte"){
+                    panelValveAmontStatus.setBackground(Color.green);
+                }
+                labelStatusValveAmont.setText(v.status);
+            } else if (v.pos == 1){
+                if(v.status == "Fermée"){
+                    panelValveAvalStatus.setBackground(Color.red);
+                } else if (v.status == "Ouverte"){
+                    panelValveAvalStatus.setBackground(Color.green);
+                }
+                labelStatusValveAval.setText(v.status);
+            }
+        }
+        
+    }
+
     public void changeStatusBtn(JButton button, String type, JPanel panelStatus, JLabel labelStatus){                                       //status = 1, ouvert; status = 2, fermé
 
         String txt = "";
@@ -593,6 +651,7 @@ public class Window extends JFrame implements Runnable{
                 panelGeneralIssueStatus.setBackground(Color.green);
                 labelGeneralIssue.setText("Pas de panne générale");
             }
+            componentStatus();
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {

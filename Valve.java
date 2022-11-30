@@ -10,7 +10,7 @@ public class Valve {
     int height;
     int width;
 
-    int status;                                                                                                     //status = 1, la vanne est ouverte; status = 2, la vanne est fermée
+    String status;                                                                                                     //status = 1, la vanne est ouverte; status = 2, la vanne est fermée
 
     public Valve(int pos, int maxHeight, int maxWidth){
         this.pos = pos;
@@ -21,7 +21,9 @@ public class Valve {
         width = 30;
 
         posY = 325;
-        
+
+        status = "Fermée";
+
         if(pos == 0){
             posX = (int)((maxWidth * 0.4) - 10);
         } else if (pos == 1){

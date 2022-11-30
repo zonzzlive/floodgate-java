@@ -136,11 +136,11 @@ public class PaintC extends Component implements Runnable{
                         }    
                     } else {
                         if((collisionDetection() == 1) && !checkDoorHeight(door1)){                                             //si collision sur la porte 1
-                            moveDoorYR(door1, -statusBtnPanne[4]);
                             status = statusErreur.COLLISIOND1;
+                            moveDoorYR(door1, -statusBtnPanne[4]);
                         } else if ((collisionDetection() == 2) && !checkDoorHeight(door2)){                                     //si collision sur la porte 2
-                            moveDoorYR(door2, -statusBtnPanne[5]);
                             status = statusErreur.COLLISIOND2;
+                            moveDoorYR(door2, -statusBtnPanne[5]);
                         } else {
                             checkBoatStatus();
                         }
@@ -289,19 +289,22 @@ public class PaintC extends Component implements Runnable{
 
 //--------------------------------------------------------------------------------DOOR PART----------------------------------------------------------------------------------------------
 
-    public boolean checkDoorHeight(Door door){                                                          //return false, si la porte est ouverte; return true si la porte est fermée
+    public boolean checkDoorHeight(Door door){                                                          //return false, si la porte est fermée; return true si la porte est ouverte
         if(door.posY != 25){
+            if(door.posY == 200){
+                door.status = "Fermée";
+            }
             return false;
         } else {
+            if(door.posY == 25){
+                door.status = "Ouverte";
+            }
             return true;
         }
     }
 
     public int checkCloseDoor(){                                                                        //return 0, les portes sont fermées; return 1, la porte 1 est ouverte; return 2, la porte 2 est ouverte
         if(door1.posY != 200){
-            if(door1.posY != 25){
-                
-            }
             return 1;
         } 
         if(door2.posY != 200){
@@ -318,8 +321,9 @@ public class PaintC extends Component implements Runnable{
             if((checkStatus == 0) || (checkStatus == 1)){
                 door.moveDoorY(speed);
             } else {
-                if(door.posY < 200 && door.posY > 25)
-                door.moveDoorY(-speed);
+                if(door.posY < 200 && door.posY > 25){
+                    door.moveDoorY(-speed);
+                }
             }
         }
     }
@@ -353,8 +357,12 @@ public class PaintC extends Component implements Runnable{
                 riverArray[1].moveRiverY(moveRiverSpeed(0));
             } else if(checkRiverBoat() == 0){                                                           //boat sur la rivière de gauche
                 riverArray[1].moveRiverY(moveRiverSpeed(3021));
+                valves[0].status = "Ouverte";
+                valves[1].status = "Fermée";
             } else if(checkRiverBoat() == 2){                                                           //boat sur la rivière de droite
                 riverArray[1].moveRiverY(moveRiverSpeed(3120));
+                valves[0].status = "Fermée";
+                valves[1].status = "Ouverte";
             }
         } else {
             if(checkRiverBoat() == 1){
@@ -393,8 +401,12 @@ public class PaintC extends Component implements Runnable{
                 return valveIssueGestion(valveCombinaison);
             } else{
                 if(collisionDetection() == 1){
+                    valves[0].status = "Fermée";
+                    valves[1].status = "Ouverte";
                     return valveIssueGestion(3021);
                 } else if (collisionDetection() == 2){
+                    valves[0].status = "Fermée";
+                    valves[1].status = "Ouverte";
                     return valveIssueGestion(3120);
                 }
             }
