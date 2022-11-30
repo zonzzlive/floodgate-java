@@ -315,17 +315,20 @@ public class PaintC extends Component implements Runnable{
 
     public void moveDoorYR (Door door, int speed){
         int checkStatus = statusBtnManual[door.pos] + speed;
-        if(statusAuto == "AUTO"){
-            door.moveDoorY(speed);
-        } else {
-            if((checkStatus == 0) || (checkStatus == 1)){
+        if(boat.pos!=0){
+            if(statusAuto == "AUTO"){
                 door.moveDoorY(speed);
             } else {
-                if(door.posY < 200 && door.posY > 25){
-                    door.moveDoorY(-speed);
+                if((checkStatus == 0) || (checkStatus == 1)){
+                    door.moveDoorY(speed);
+                } else {
+                    if(door.posY < 200 && door.posY > 25){
+                        door.moveDoorY(-speed);
+                    }
                 }
             }
         }
+        
     }
 
 
