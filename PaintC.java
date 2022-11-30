@@ -153,7 +153,7 @@ public class PaintC extends Component implements Runnable{
                             boat.moveBoatX(statusBtnPanne[0]);
                         }
                     } else if (boat.pos == 1){
-                        if(boat.posX > -50 && boat.posX != maxWidth + 31){
+                        if(boat.posX > -50){
                             boat.moveBoatX(statusBtnPanne[1]);
                         }
                     }
@@ -261,17 +261,17 @@ public class PaintC extends Component implements Runnable{
         if(collisionNb == 1){
             if(checkCloseDoor() != 1){
                 if(boat.posX == 728){                                               //boat.pos == -1
-                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31; 
+                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31;
                 } else if(boat.posX == 768){                                        //boat.pos == 1
-                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31; 
+                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31;
                 }
             }
         } else if(collisionNb == 2){
             if(checkCloseDoor() != 2){
                 if(boat.posX == 1112){                                              //boat.pos == -1
-                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31; 
+                    boat.pos = 0;                                                           //boat.posX = maxWidth + 31;
                 } else if(boat.posX == 1152){                                       //boat.pos == 1
-                    boat.pos = 0;                                                           //boat.posX = -81; 
+                    boat.pos = 0;                                                           //boat.posX = -81;
                 }
             }
         }
@@ -392,7 +392,11 @@ public class PaintC extends Component implements Runnable{
             if(valveCombinaison != 0){
                 return valveIssueGestion(valveCombinaison);
             } else{
-                return -boat.pos;
+                if(collisionDetection() == 1){
+                    return valveIssueGestion(3021);
+                } else if (collisionDetection() == 2){
+                    return valveIssueGestion(3120);
+                }
             }
         }
         return 0;
